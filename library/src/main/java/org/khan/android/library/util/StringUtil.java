@@ -22,10 +22,7 @@ public class StringUtil {
 		}
 		return false;
 	}
-	
-	/**
-	 * Base64 인코딩
-	 */
+
 	public static String getBase64encode(String content) {
 		if (notEmpty(content)) {
 			return Base64.encodeToString(content.getBytes(), Base64.NO_WRAP);
@@ -33,9 +30,6 @@ public class StringUtil {
 		return "";
 	}
 
-	/**
-	 * Base64 디코딩
-	 */
 	public static String getBase64decode(String content) {
 		if (notEmpty(content)) {
 			return new String(Base64.decode(content, Base64.NO_WRAP));

@@ -1,16 +1,4 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.1'
-    }
-}
 apply plugin: 'com.android.library'
-
-repositories {
-    jcenter()
-}
 
 android {
     compileSdkVersion 22
@@ -19,13 +7,17 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        multiDexEnabled true
     }
-
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_6
         targetCompatibility JavaVersion.VERSION_1_6
+        encoding "UTF-8"
     }
     buildTypes {
         release {
@@ -39,4 +31,42 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:support-v4:22.1.1'
+    compile 'org.khan.android:custom-volley:1.0.0-SNAPSHOT'
 }
+
+// build a jar with source files
+task sourcesJar(type: Jar) {
+    println ":${project.name}:sourcesJar"
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    println ":${project.name}:javadoc"
+    options.charSet = 'UTF-8'
+    options.encoding "UTF-8"
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+// Build a jar file in addition to the default aar file
+android.libraryVariants.all { variant ->
+    // generate jar file task
+    def name = variant.buildType.name
+    def task = project.tasks.create "jar${name.capitalize()}", Jar
+    task.dependsOn variant.javaCompile
+    task.from variant.javaCompile.destinationDir
+    artifacts.add('archives', task)
+}
+
+apply from: '../gradle/maven_publish.gradle'

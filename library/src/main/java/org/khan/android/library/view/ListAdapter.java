@@ -1,9 +1,9 @@
 package org.khan.android.library.view;
 
+import org.khan.android.library.callback.OnDataLoadListener;
+
 import java.util.Collection;
 import java.util.List;
-
-import org.khan.android.libraries.callback.OnDataLoadListener;
 
 
 public interface ListAdapter<T, I> {

@@ -1,17 +1,16 @@
 package org.khan.android.library.view;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.khan.android.libraries.callback.OnDataLoadListener;
-import org.khan.android.libraries.ui.UIHandler;
-import org.khan.android.libraries.util.CollectionUtil;
-
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import org.khan.android.library.callback.OnDataLoadListener;
+import org.khan.android.library.ui.UIHandler;
+import org.khan.android.library.util.CollectionUtil;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public abstract class BaseListAdapter<T, I, V extends AbsListItemView<T>> extends BaseAdapter implements ListAdapter<T, I>, OnDataLoadListener {
