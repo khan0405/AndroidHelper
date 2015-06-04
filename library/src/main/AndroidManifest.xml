@@ -1,9 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.khan.android.library">
 
-    <application android:allowBackup="true"
-                 android:label="AndroidHelper">
-
-    </application>
+    <uses-sdk
+            android:minSdkVersion="14"
+            android:targetSdkVersion="22" />
 
 </manifest>

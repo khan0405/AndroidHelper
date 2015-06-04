@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
     compileSdkVersion 22
@@ -7,11 +8,15 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 22
-        multiDexEnabled true
     }
     sourceSets {
         main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
             java.srcDirs = ['src/main/java']
+            resources.srcDirs = ['src/main/java']
+            aidl.srcDirs = ['src/main/java']
+            renderscript.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
         }
     }
     compileOptions {
@@ -31,7 +36,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:support-v4:22.1.1'
-    compile 'org.khan.android:custom-volley:1.0.0-SNAPSHOT'
+    compile 'org.khan.android:custom-volley:1.0.0-SNAPSHOT@jar'
 }
 
 // build a jar with source files
@@ -50,6 +55,7 @@ task javadoc(type: Javadoc) {
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
+    println ":${project.name}:javadocJar"
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
@@ -60,6 +66,7 @@ artifacts {
 }
 
 // Build a jar file in addition to the default aar file
+/*
 android.libraryVariants.all { variant ->
     // generate jar file task
     def name = variant.buildType.name
@@ -68,5 +75,5 @@ android.libraryVariants.all { variant ->
     task.from variant.javaCompile.destinationDir
     artifacts.add('archives', task)
 }
-
+*/
 apply from: '../gradle/maven_publish.gradle'
