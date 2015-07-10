@@ -1,20 +1,22 @@
 package org.khan.android.library.db;
 
-import java.io.Closeable;
-import java.util.concurrent.Callable;
-
 import android.content.Context;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public abstract class BaseDao implements Closeable {
+import java.io.Closeable;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+
+public abstract class BaseDao<T, ID extends Serializable> implements Closeable {
 	
 	private SQLiteOpenHelper helper;
 	
 	private SQLiteDatabase readableDB;
 	private SQLiteDatabase writableDB;
-	
+
 	public BaseDao(Context context) {
 		helper = getDefaultDBHelper(context);
 	}
@@ -25,6 +27,7 @@ public abstract class BaseDao implements Closeable {
 		if (readableDB == null) {
 			readableDB = helper.getReadableDatabase();
 		}
+
 		return readableDB;
 	}
 	
@@ -46,32 +49,50 @@ public abstract class BaseDao implements Closeable {
 			writableDB.close();
 			writableDB = null;
 		}
-		
+
 		helper.close();
 		helper = null;
 	}
-	
-	protected <V> V executeWithTransaction(Callable<V> task) {
+
+	protected void executeWithTransaction(Runnable task) {
 		SQLiteDatabase db = getWritableDB();
 		try {
 			db.beginTransaction();
-			
-			V obj = task.call();
-			
+			task.run();
 			db.setTransactionSuccessful();
-			
-			return obj;
-		} 
-		catch (SQLException e) {
-			
-		}
-		catch (Exception e) {
-			
 		}
 		finally {
 			db.endTransaction();
 		}
-		
-		return null;
+	}
+
+	protected static <V> V executeWithTransaction(SQLiteDatabase db, Callable<V> task) {
+		try {
+			db.beginTransaction();
+			V obj = task.call();
+			db.setTransactionSuccessful();
+			return obj;
+		}
+		catch (Exception e) {
+			// do nothing..
+			return null;
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+
+	<S> List<S> aa(final List<S> items) throws Exception {
+		return a(new Callable<List<S>>() {
+			@Override
+			public List<S> call() throws Exception {
+				return new ArrayList<S>(items);
+			}
+		});
+	}
+
+	<V> V a(Callable<V> task) throws Exception {
+		return task.call();
 	}
 }
