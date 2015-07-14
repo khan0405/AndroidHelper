@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.io.Closeable;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 public abstract class BaseDao<T, ID extends Serializable> implements Closeable {
@@ -54,8 +52,7 @@ public abstract class BaseDao<T, ID extends Serializable> implements Closeable {
 		helper = null;
 	}
 
-	protected void executeWithTransaction(Runnable task) {
-		SQLiteDatabase db = getWritableDB();
+	protected static void executeWithTransaction(SQLiteDatabase db, Runnable task) {
 		try {
 			db.beginTransaction();
 			task.run();
@@ -80,19 +77,5 @@ public abstract class BaseDao<T, ID extends Serializable> implements Closeable {
 		finally {
 			db.endTransaction();
 		}
-	}
-
-
-	<S> List<S> aa(final List<S> items) throws Exception {
-		return a(new Callable<List<S>>() {
-			@Override
-			public List<S> call() throws Exception {
-				return new ArrayList<S>(items);
-			}
-		});
-	}
-
-	<V> V a(Callable<V> task) throws Exception {
-		return task.call();
 	}
 }

@@ -221,9 +221,11 @@ public abstract class AbsGenericDao<T extends BaseModel, ID extends Serializable
                 return result;
             }
         });
+
         if (result == null) {
             result = false;
         }
+
         return result;
     }
 

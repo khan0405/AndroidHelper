@@ -34,9 +34,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.1.1'
-    compile 'com.android.support:support-v4:22.1.1'
-    compile 'org.khan.android:custom-volley:1.0.0-SNAPSHOT@jar'
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'net.devkhan.android:custom-volley:1.0.0@jar'
 }
 
 // build a jar with source files
@@ -65,15 +65,4 @@ artifacts {
     archives javadocJar
 }
 
-// Build a jar file in addition to the default aar file
-/*
-android.libraryVariants.all { variant ->
-    // generate jar file task
-    def name = variant.buildType.name
-    def task = project.tasks.create "jar${name.capitalize()}", Jar
-    task.dependsOn variant.javaCompile
-    task.from variant.javaCompile.destinationDir
-    artifacts.add('archives', task)
-}
-*/
 apply from: '../gradle/maven_publish.gradle'
