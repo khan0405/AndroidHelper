@@ -7,6 +7,6 @@ public class CollectionUtil {
 		return (collection == null || collection.isEmpty());
 	}
 	public static boolean notEmpty(Collection<?> collection) {
-		return (collection != null && !collection.isEmpty());
+		return !isEmpty(collection);
 	}
 }

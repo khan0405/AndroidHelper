@@ -1,12 +1,16 @@
 package net.devkhan.android.library.background;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import net.devkhan.android.library.callback.Callback;
 import net.devkhan.android.library.logging.L;
 import net.devkhan.android.library.ui.UIHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
 
 /**
  * Thread Management class.
@@ -31,19 +35,26 @@ public class ThreadManager  {
     }
 
     public void shutdown() {
-        if (cachedThreadPool != null && !cachedThreadPool.isShutdown() && !cachedThreadPool.isTerminated()) {
+        if (isAlive(cachedThreadPool)) {
             cachedThreadPool.shutdownNow();
             cachedThreadPool = null;
         }
-        if (singleThreadExecutor != null && !singleThreadExecutor.isShutdown() && !singleThreadExecutor.isTerminated()) {
+        if (isAlive(singleThreadExecutor)) {
             singleThreadExecutor.shutdownNow();
             singleThreadExecutor = null;
         }
     }
 
+    private boolean isAlive(ExecutorService executor) {
+        return executor != null && !executor.isShutdown() && !executor.isTerminated();
+    }
+
     public boolean isTerminated() {
-        return (cachedThreadPool == null || cachedThreadPool.isShutdown() || cachedThreadPool.isTerminated())
-                || (singleThreadExecutor == null || singleThreadExecutor.isShutdown() || singleThreadExecutor.isTerminated());
+        return isTerminated(cachedThreadPool) || isTerminated(singleThreadExecutor);
+    }
+
+    private boolean isTerminated(ExecutorService executor) {
+        return (executor == null || executor.isShutdown() || executor.isTerminated());
     }
 
     private void throwIfTerminated() {

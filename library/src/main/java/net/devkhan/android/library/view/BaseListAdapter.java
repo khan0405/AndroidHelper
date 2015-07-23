@@ -4,13 +4,14 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import net.devkhan.android.library.callback.OnDataLoadListener;
-import net.devkhan.android.library.ui.UIHandler;
-import net.devkhan.android.library.util.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import net.devkhan.android.library.callback.OnDataLoadListener;
+import net.devkhan.android.library.ui.UIHandler;
+import net.devkhan.android.library.util.CollectionUtil;
 
 
 public abstract class BaseListAdapter<T, I, V extends AbsListItemView<T>> extends BaseAdapter implements ListAdapter<T, I>, OnDataLoadListener {
@@ -105,11 +106,12 @@ public abstract class BaseListAdapter<T, I, V extends AbsListItemView<T>> extend
 
 	public void addItem(int index, T item) {
 		if (item != null) {
-			if (getItems().size() > index && index > -1) {
-				getItems().add(index, item);
+			List<T> list = getItems();
+			if (list.size() > index && index > -1) {
+				list.add(index, item);
 			}
 			else {
-				getItems().add(item);
+				list.add(item);
 			}
 		}
 	}
@@ -135,11 +137,12 @@ public abstract class BaseListAdapter<T, I, V extends AbsListItemView<T>> extend
 			clearItems();
 		}
 		if (CollectionUtil.notEmpty(items)) {
-			if (getItems().size() > index && index > -1) {
-				getItems().addAll(index, items);
+			List<T> list = getItems();
+			if (list.size() > index && index > -1) {
+				list.addAll(index, items);
 			}
 			else {
-				getItems().addAll(items);
+				list.addAll(items);
 			}
 		}
 	}
