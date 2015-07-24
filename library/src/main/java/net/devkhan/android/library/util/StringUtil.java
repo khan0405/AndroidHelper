@@ -9,7 +9,7 @@ public class StringUtil {
 	}
 	
 	public static boolean notEmpty(CharSequence s) {
-		return s != null && !"".equals(s.toString().trim());
+		return !isEmpty(s);
 	}
 	
 	public static String nvl(String s) {

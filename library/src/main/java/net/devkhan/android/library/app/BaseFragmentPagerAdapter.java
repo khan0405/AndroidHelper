@@ -3,24 +3,25 @@ package net.devkhan.android.library.app;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import net.devkhan.android.library.logging.L;
-import net.devkhan.android.library.util.CollectionUtil;
 
 import java.util.List;
 
+import net.devkhan.android.library.logging.L;
+import net.devkhan.android.library.util.CollectionUtil;
+
 public abstract class BaseFragmentPagerAdapter extends FragmentPagerAdapter {
 
-	private BaseActivity activity;
+	private Context context;
 	
 	private List<Fragment> items;
 	
 	public BaseFragmentPagerAdapter(BaseActivity activity) {
 		super(activity.getSupportFragmentManager());
-		this.activity = activity;
+		this.context = activity;
 	}
 	
 	Context getContext() {
-		return activity;
+		return context;
 	}
 	
 	protected abstract List<Fragment> generateItems();
@@ -46,11 +47,7 @@ public abstract class BaseFragmentPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		List<Fragment> items = getItems();
-		if (CollectionUtil.notEmpty(items)) {
-			return items.size();
-		}
-		return 0;
+		return getItems().size();
 	}
 	
 	@Override
