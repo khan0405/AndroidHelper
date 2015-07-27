@@ -1,16 +1,12 @@
 package net.devkhan.android.library.background;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import net.devkhan.android.library.callback.Callback;
 import net.devkhan.android.library.logging.L;
 import net.devkhan.android.library.ui.UIHandler;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
  * Thread Management class.
@@ -50,11 +46,7 @@ public class ThreadManager  {
     }
 
     public boolean isTerminated() {
-        return isTerminated(cachedThreadPool) || isTerminated(singleThreadExecutor);
-    }
-
-    private boolean isTerminated(ExecutorService executor) {
-        return (executor == null || executor.isShutdown() || executor.isTerminated());
+        return !isAlive(cachedThreadPool) || !isAlive(singleThreadExecutor);
     }
 
     private void throwIfTerminated() {
